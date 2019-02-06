@@ -1,33 +1,56 @@
 <?php
 
+################################################################################
+#connection vars
 $hostport = "localhost";            # database host
 $user     = "root";                 # database user name
 $password = "";                     # database password
 $database = "aldfaer";              # database schema name
-
+################################################################################
 $conn = new mysqli($hostport, $user, $password, $database);
-#$conn = mysqli_connect($hostport, $user, $password, $database);
+# check connection:
 if ($conn->connect_error)  {
   die("Connection failed: " . $conn->connect_error);
-#if(!$conn)  {
-  #die("Connection failed: " . mysqli_connect_error());
-  #echo "no connection";
-}
-#######################################################################################################################
-# Selecteert persoon:
-$persoon = "SELECT vorname, name, birt_date, birt_plac, sex FROM person_st WHERE persID = 'I1'";
-$result = $conn->query($persoon);
-if (!$result) {
-  echo "????";
 }
 
-if ($result->num_rows > 0)  {
-  while($row = $result->fetch_assoc())  {
-    echo $row["vorname"]. " " . $row["name"]. " " . $row["birt_date"]. " " . $row["birt_plac"]. " " . $row["sex"]. "<br>";
-  }
-} else {
-  echo "geen resultaten";
-  }
+class Persoon
+{
+  public $achternaam = 'achternaam';
+  public $voornaam = 'voornaam';
+  public $geboortedatum = '01-01-1000';
+  public $geboorteplaats = 'ergens';
+  public $geslacht = 'O';
+
+  public function setInfo($conn) {
+    $persoon = "SELECT vorname, name, birt_date, birt_plac, sex FROM person_st WHERE persID = 'I1'";
+    $result = $conn->query($persoon);
+    if (!$result) {
+      echo "????";
+    }
+    else if ($result->num_rows > 0)  {
+      while($row = $result->fetch_assoc())  {
+        $voornaam = $row["vorname"];
+        $achternaam = $row["name"];
+        $geboortedatum = $row["birt_date"];
+        $geboorteplaats = $row["birt_plac"];
+        $geslacht = $row["sex"];
+
+    	  $this->achternaam = $achternaam;
+        $this->voornaam = $voornaam;
+        $this->geboortedatum = $geboortedatum;
+        $this->geboorteplaats = $geboorteplaats;
+       }
+     }
+   }
+   public function geefInfo()  {
+     echo $this->voornaam. " " . $this->achternaam. " is geboren op " . $this->geboortedatum. " in " . $this->geboorteplaats. "." . "<br>";
+     echo "<br>Ouders: <br>";
+   }
+}
+
+$basispersoon = new Persoon();
+$basispersoon->setInfo($conn);
+$basispersoon->geefInfo();
 
 #######################################################################################################################
 # Selecteert familie van persoon:
