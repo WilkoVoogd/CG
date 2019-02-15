@@ -1,5 +1,10 @@
 <?php
 
+
+
+#      persID moet variabel gemaakt worden somehow
+
+
 ################################################################################
 #connection vars
 $hostport = "localhost";            # database host

@@ -1,0 +1,8 @@
+.tbody {
+  text-align: center;
+}
+
+.tbody tr td  {
+  border-style: solid;
+  border-color: #8b8b8b;
+}
